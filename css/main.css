@@ -452,14 +452,14 @@ html{
 
 }
 
-.container-options{
+.container-options{         /* modificando*/
     display: flex;
     justify-content: center;
     gap: 2rem;
     margin-bottom: 1rem;
 }
 
-.container-options span{
+.container-options button{
     color:#777;
     background-color: #fff;
     padding: .7rem 3rem;
@@ -469,14 +469,14 @@ html{
     cursor:pointer;
 }
 
-.container-options span:hover{
+.container-options button:hover{
     background-color: var(--primary-color);
     color: #fff;
 
 }
 
 
-.container-options span.active{
+.container-options button.active{
     background-color: var(--primary-color);
     color: #fff;
 
@@ -507,7 +507,9 @@ html{
 
 .container-img img{
     border-radius: .5rem;
-    width: 100%;
+    width: 120px;
+    height: 100px;        /*  pruebas*/ 
+    
 }
 
 .container-img .discount{
