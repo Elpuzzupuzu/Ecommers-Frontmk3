@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
 // Función para actualizar el título principal según la categoría seleccionada
 function actualizarTituloPrincipal(categoryName) {
-    const tituloPrincipal = document.querySelector(".container-options");   /* TRABAJANDO*/
+    const tituloPrincipal = document.querySelector(".heading-1");   /* TRABAJANDO*/
     if (categoryName === 'todos') {
         tituloPrincipal.textContent = 'Todos los productos';
     } else {
@@ -151,9 +151,9 @@ function mostrarProductos(products) {
                             <i class="fa-regular fa-star"></i>
                         </div>
                         <h3>${product.name}</h3>
-                        <span class="add-cart">
+                        <button class="add-cart" id=${product.id}>
                             <i class="fa-solid fa-basket-shopping"></i>
-                        </span>
+                        </button>
                         <p class="price">$${product.price} <span></span></p>
                     </div>
                 </div><!--fin card product-->
@@ -164,7 +164,7 @@ function mostrarProductos(products) {
 
 // Función para actualizar eventos de botones de agregar
 function actualizarBotonesAgregar() {
-    document.querySelectorAll('.producto-agregar').forEach(boton => {
+    document.querySelectorAll('.add-cart').forEach(boton => {
         boton.removeEventListener('click', agregarAlCarrito); // Limpiar eventos existentes
         boton.addEventListener('click', agregarAlCarrito); // Agregar evento actualizado
     });

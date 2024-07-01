@@ -622,7 +622,7 @@ html{
 
 .add-cart{
     justify-self: start;
-    border: 2px solid var(--primary-color);
+    border: 2px solid var(--primary-color);    /* PRUEBAS*/
     padding: 1.5rem;
     border-radius: 10%;
     cursor: pointer;
