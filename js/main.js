@@ -154,7 +154,8 @@ function mostrarProductos(products) {
                         <button class="add-cart" id=${product.id}>
                             <i class="fa-solid fa-basket-shopping"></i>
                         </button>
-                        <p class="price">$${product.price} <span></span></p>
+                        <p class="price">$${product.price}  <span></span></p>
+                        <P class="price">${product.stock}<span></span></p>
                     </div>
                 </div><!--fin card product-->
         `;

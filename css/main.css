@@ -6,11 +6,7 @@
     --background-color: #d1b2c1;
     --dark-color: #151515;
 
-    --clr-main: #c11c5b;
-    --clr-main-light:#e65a82;
-    --clr-white: #d8aada;
-    --clr-gray: hsl(0, 11%, 80%);
-    --clr-red: #961818;
+  
 
 }
 
@@ -544,7 +540,7 @@ html{
     transition: all .4s ease;
 
 }
-
+                                           /* TEST PARA MOSTRAR DATOS     */
 .button-group span{
     border: 1px solid var(--primary-color);
     padding: .5rem;
