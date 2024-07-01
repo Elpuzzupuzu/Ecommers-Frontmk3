@@ -6,6 +6,12 @@
     --background-color: #d1b2c1;
     --dark-color: #151515;
 
+    --clr-main: #c11c5b;
+    --clr-main-light:#e65a82;
+    --clr-white: #d8aada;
+    --clr-gray: hsl(0, 11%, 80%);
+    --clr-red: #961818;
+
 }
 
 html{
@@ -1095,6 +1101,20 @@ html{
 		gap: 1.5rem;
 	}
 }
+
+/*------------TESTING DEL CSS DEL CARRITO-------------------*/
+
+
+
+
+/*------------------------------------*/
+
+
+
+
+
+
+
 
 /* ********************************** */
 /*       MEDIA QUERIES -- 468px       */
