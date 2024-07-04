@@ -32,7 +32,7 @@ async function getAllProductSummaries() {
 
 // Variables globales
 const productos = [];
-let productoAgregado = JSON.parse(localStorage.getItem("productos-en-carrito")) || [];
+let productosEnCarrito = JSON.parse(localStorage.getItem("productos-en-carrito")) || [];
 const numerito = document.querySelector("#numerito");
 
 // Función para cargar los productos después de que el DOM esté completamente cargado
@@ -80,10 +80,14 @@ document.addEventListener("DOMContentLoaded", async function() {
 // Función para actualizar el título principal según la categoría seleccionada
 function actualizarTituloPrincipal(categoryName) {
     const tituloPrincipal = document.querySelector(".heading-1");
-    if (categoryName === 'todos') {
-        tituloPrincipal.textContent = 'Todos los productos';
+    if (tituloPrincipal) {
+        if (categoryName === 'todos') {
+            tituloPrincipal.textContent = 'Todos los productos';
+        } else {
+            tituloPrincipal.textContent = `Productos de ${categoryName}`;
+        }
     } else {
-        tituloPrincipal.textContent = `Productos de ${categoryName}`;
+        console.error('Elemento con clase "heading-1" no encontrado en el DOM');
     }
 }
 
@@ -177,31 +181,31 @@ function actualizarBotonesAgregar() {
 // Función para agregar productos al carrito
 async function agregarAlCarrito(e) {
     const idBoton = parseInt(e.currentTarget.id, 10);
-    console.log(`ID del botón: ${idBoton}`);
+    const productoAgregado = productos.find(producto => producto.id === idBoton);
 
-    const productoAgregadoEnClick = productos.find(producto => producto.id === idBoton);
-    if (productoAgregadoEnClick) {
-        const productoEnCarrito = productoAgregado.find(producto => producto.id === idBoton);
+    if (productoAgregado) {
+        const productoEnCarrito = productosEnCarrito.find(producto => producto.id === idBoton);
+
         if (productoEnCarrito) {
             // Si el producto ya está en el carrito, aumentar la cantidad vendida
             productoEnCarrito.sold++;
         } else {
             // Si el producto no está en el carrito, agregarlo con la cantidad vendida inicial de 1
-            productoAgregadoEnClick.sold = 1;
-            productoAgregado.push(productoAgregadoEnClick);
-            console.log(`Producto agregado:`, productoAgregadoEnClick);
+            productoAgregado.sold = 1;
+            productosEnCarrito.push(productoAgregado);
+            console.log(`Producto agregado al carrito:`, productoAgregado);
+
+            // Guardar productos en el carrito en localStorage
+            localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
 
             // Envía el producto al carrito en el backend
-            await agregarProductoAlCarrito(productoAgregadoEnClick.id, 1); // Aquí 1 es la cantidad inicial
+            await agregarProductoAlCarrito(productoAgregado.id, 1); // Aquí 1 es la cantidad inicial
         }
-        console.log(productoAgregado);
     } else {
         console.error(`Producto con ID ${idBoton} no encontrado`);
     }
-    actualizarNumerito();
-    localStorage.setItem("productos-en-carrito", JSON.stringify(productoAgregado));
 
-    console.log(`Productos en el carrito:`, productoAgregado);
+    actualizarCarrito();
 }
 
 // Función para enviar el producto al carrito en el backend
@@ -238,6 +242,14 @@ async function initializeProductos() {
 
 // Función para actualizar el número de productos en el carrito
 function actualizarNumerito() {
-    let nuevoNumerito = productoAgregado.reduce((acc, producto) => acc + producto.sold, 0);
+    let nuevoNumerito = productosEnCarrito.reduce((acc, producto) => acc + producto.sold, 0);
     numerito.innerText = nuevoNumerito;
 }
+
+// Función para actualizar el carrito (puede ser una función vacía si no necesitas realizar ninguna acción específica)
+function actualizarCarrito() {
+    // Aquí puedes implementar la lógica necesaria para actualizar la visualización del carrito
+    // Esta función debe estar definida y accesible donde la estás utilizando, para evitar errores de referencia
+    console.log('Carrito actualizado');
+}
+
