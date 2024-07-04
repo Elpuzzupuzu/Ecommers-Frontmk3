@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
 
     // Obtener todos los botones de categoría
-    const botonesCategoria = document.querySelectorAll(".boton-categoria");    /* probando * TTTTTTTTTTTTTT*/ 
+    const botonesCategoria = document.querySelectorAll(".boton-categoria");
 
     // Escuchar clics en los botones de categoría
     botonesCategoria.forEach(boton => {
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
 // Función para actualizar el título principal según la categoría seleccionada
 function actualizarTituloPrincipal(categoryName) {
-    const tituloPrincipal = document.querySelector(".heading-1");   /* TRABAJANDO*/
+    const tituloPrincipal = document.querySelector(".heading-1");
     if (categoryName === 'todos') {
         tituloPrincipal.textContent = 'Todos los productos';
     } else {
@@ -109,9 +109,9 @@ async function cargarProductosPorCategoria(categoryName) {
     }
 }
 
-// Función para mostrar productos en el contenedor  /*ya modificado*/
+// Función para mostrar productos en el contenedor
 function mostrarProductos(products) {
-    const contenedorProductos = document.querySelector("#container-products"); // parte dinamica a modificar
+    const contenedorProductos = document.querySelector("#container-products");
 
     if (!contenedorProductos) {
         console.error('Contenedor de productos no encontrado en el DOM');
@@ -161,6 +161,9 @@ function mostrarProductos(products) {
         `;
         contenedorProductos.appendChild(div);
     });
+
+    // Actualizar eventos de botones de agregar
+    actualizarBotonesAgregar();
 }
 
 // Función para actualizar eventos de botones de agregar
@@ -172,7 +175,7 @@ function actualizarBotonesAgregar() {
 }
 
 // Función para agregar productos al carrito
-function agregarAlCarrito(e) {
+async function agregarAlCarrito(e) {
     const idBoton = parseInt(e.currentTarget.id, 10);
     console.log(`ID del botón: ${idBoton}`);
 
@@ -187,6 +190,9 @@ function agregarAlCarrito(e) {
             productoAgregadoEnClick.sold = 1;
             productoAgregado.push(productoAgregadoEnClick);
             console.log(`Producto agregado:`, productoAgregadoEnClick);
+
+            // Envía el producto al carrito en el backend
+            await agregarProductoAlCarrito(productoAgregadoEnClick.id, 1); // Aquí 1 es la cantidad inicial
         }
         console.log(productoAgregado);
     } else {
@@ -196,6 +202,27 @@ function agregarAlCarrito(e) {
     localStorage.setItem("productos-en-carrito", JSON.stringify(productoAgregado));
 
     console.log(`Productos en el carrito:`, productoAgregado);
+}
+
+// Función para enviar el producto al carrito en el backend
+async function agregarProductoAlCarrito(productId, quantity) {
+    try {
+        const response = await fetch(`http://localhost:8080/cart/add?userId=1&productId=${productId}&quantity=${quantity}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al agregar producto al carrito');
+        }
+
+        console.log('Producto agregado al carrito en el backend');
+    } catch (error) {
+        console.error('Error al agregar producto al carrito en el backend:', error);
+        alert('Error al agregar producto al carrito');
+    }
 }
 
 // Función de inicialización
@@ -214,6 +241,3 @@ function actualizarNumerito() {
     let nuevoNumerito = productoAgregado.reduce((acc, producto) => acc + producto.sold, 0);
     numerito.innerText = nuevoNumerito;
 }
-
-
-    
