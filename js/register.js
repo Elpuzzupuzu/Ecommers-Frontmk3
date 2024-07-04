@@ -1,4 +1,4 @@
-document.getElementById('crearUsuarioForm').addEventListener('submit', function(e) {
+document.getElementById('crearUsuarioForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const firstName = document.getElementById('firstName').value;
@@ -13,25 +13,25 @@ document.getElementById('crearUsuarioForm').addEventListener('submit', function(
         return;
     }
 
-    // Enviar datos al servidor
-    fetch('http://localhost:8080/users/create', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: firstName + ' ' + lastName,
-            email: email,
-            password: password
-        })
-    })
-    .then(response => {
+    try {
+        // Enviar datos al servidor para crear el usuario
+        const response = await fetch('http://localhost:8080/users/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: firstName + ' ' + lastName,
+                email: email,
+                password: password
+            })
+        });
+
         if (!response.ok) {
             throw new Error('Ya existe un usuario con el mismo correo electrónico o nombre de usuario.');
         }
-        return response.json();
-    })
-    .then(data => {
+
+        const data = await response.json();
         console.log('Success:', data);
         alert('Usuario creado exitosamente');
 
@@ -42,11 +42,11 @@ document.getElementById('crearUsuarioForm').addEventListener('submit', function(
         document.getElementById('password').value = '';
         document.getElementById('birthdate').value = '';
 
-        // Redirigir a la página index.html después de enviar el formulario
-        window.location.href = './index.html';
-    })
-    .catch((error) => {
+        // Redirigir a la página de inicio de sesión (login.html)
+        window.location.href = './login.html';
+
+    } catch (error) {
         console.error('Error:', error.message);
         alert('Hubo un error al crear el usuario: ' + error.message);
-    });
+    }
 });
