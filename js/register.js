@@ -50,3 +50,4 @@ document.getElementById('crearUsuarioForm').addEventListener('submit', async fun
         alert('Hubo un error al crear el usuario: ' + error.message);
     }
 });
+

@@ -201,11 +201,12 @@ async function agregarAlCarrito(e) {
             // Envía el producto al carrito en el backend
             await agregarProductoAlCarrito(productoAgregado.id, 1); // Aquí 1 es la cantidad inicial
         }
+
+        // Actualizar número de productos en el carrito después de modificarlo
+        actualizarNumerito();
     } else {
         console.error(`Producto con ID ${idBoton} no encontrado`);
     }
-
-    actualizarCarrito();
 }
 
 // Función para enviar el producto al carrito en el backend
@@ -245,11 +246,3 @@ function actualizarNumerito() {
     let nuevoNumerito = productosEnCarrito.reduce((acc, producto) => acc + producto.sold, 0);
     numerito.innerText = nuevoNumerito;
 }
-
-// Función para actualizar el carrito (puede ser una función vacía si no necesitas realizar ninguna acción específica)
-function actualizarCarrito() {
-    // Aquí puedes implementar la lógica necesaria para actualizar la visualización del carrito
-    // Esta función debe estar definida y accesible donde la estás utilizando, para evitar errores de referencia
-    console.log('Carrito actualizado');
-}
-
