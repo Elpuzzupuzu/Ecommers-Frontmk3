@@ -1,3 +1,4 @@
+// Función para manejar el login
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -29,8 +30,11 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             // Almacenar en localStorage
             localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
-            // Llamar a la función para crear el carrito
-            await createCartForUser(userId);
+            // Verificar si ya existe la información del carrito en localStorage
+            if (!localStorage.getItem('userCart')) {
+                // Llamar a la función para obtener y guardar el ID del carrito
+                await handleCartId(userId);
+            }
 
             // Redirigir al usuario a la página principal
             window.location.href = 'index.html';
@@ -43,22 +47,23 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     }
 });
 
-async function createCartForUser(userId) {
+// Función para obtener y guardar el ID del carrito
+async function handleCartId(userId) {
     try {
-        const response = await fetch(`http://localhost:8080/cart/create?userId=${userId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
+        // Fetch para obtener solo el ID del carrito del usuario
+        const response = await fetch(`http://localhost:8080/cart/${userId}/cartId`);
         if (!response.ok) {
-            throw new Error('Error al crear el carrito');
+            throw new Error('Error al obtener el ID del carrito');
         }
 
-        console.log('Carrito creado exitosamente');
+        const cartId = await response.json();
+        console.log('ID del carrito obtenido exitosamente:', cartId);
+
+        // Guardar userId y cartId en localStorage
+        localStorage.setItem('userCart', JSON.stringify({ userId: userId, cartId: cartId }));
+
     } catch (error) {
-        console.error('Error al crear el carrito:', error);
-        alert('Hubo un problema al crear el carrito. Por favor, intenta más tarde.');
+        console.error('Error al obtener o guardar el ID del carrito:', error);
+        alert('Hubo un problema al obtener o guardar el ID del carrito. Por favor, intenta más tarde.');
     }
 }
