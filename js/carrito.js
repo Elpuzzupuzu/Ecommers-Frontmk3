@@ -93,21 +93,64 @@ function actualizarTotal() {
 
 botonComprar.addEventListener("click", comprarCarrito);
 
-function comprarCarrito() {
-    fetch('http://localhost:8080/products/purchase', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(productosEncarrito)
-    })
-    .then(response => {
-        if (!response.ok) {
+
+
+//// testing 
+
+
+// Botón comprar carrito
+botonComprar.addEventListener("click", comprarCarrito);
+
+async function comprarCarrito() {
+    const userCart = JSON.parse(localStorage.getItem('userCart'));
+    if (!userCart || !userCart.cartId) {
+        console.error('No se encontró el ID del carrito en localStorage');
+        alert('Hubo un problema al obtener el ID del carrito. Por favor, intenta más tarde.');
+        return;
+    }
+
+    const cartId = userCart.cartId;
+
+    try {
+        // Iterar sobre cada producto y enviar una solicitud para agregarlo al carrito
+        for (let producto of productosEncarrito) {
+            const productId = producto.id;
+            const quantity = producto.sold;
+
+            const response = await fetch('http://localhost:8080/cart-items/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    cartId: cartId,
+                    productId: productId,
+                    quantity: quantity
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al agregar el producto al carrito');
+            }
+
+            const result = await response.json();
+            console.log('Producto agregado exitosamente:', result);
+        }
+
+        // Después de agregar todos los productos al carrito, proceder con la compra
+        const purchaseResponse = await fetch('http://localhost:8080/products/purchase', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productosEncarrito)
+        });
+
+        if (!purchaseResponse.ok) {
             throw new Error('Error en la compra');
         }
-        return response.text();
-    })
-    .then(data => {
+
+        const data = await purchaseResponse.text();
         console.log('Success:', data);
         productosEncarrito.length = 0;
         localStorage.setItem("productos-en-carrito", JSON.stringify(productosEncarrito));
@@ -115,11 +158,14 @@ function comprarCarrito() {
         contenedorCarritoProductos.classList.add("disabled");
         contenedorCarritoAcciones.classList.add("disabled");
         contenedorCarritoComprado.classList.remove("disabled");
-    })
-    .catch(error => {
+
+    } catch (error) {
         console.error('Error:', error);
-    });
+        alert('Hubo un problema al procesar la compra. Por favor, intenta más tarde.');
+    }
 }
+
+
 
 
 
