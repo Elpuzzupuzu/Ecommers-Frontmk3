@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/category.css"> <!-- Enlace al archivo CSS externo -->
+    <title>Gestión de Categorías</title>
+</head>
+<body>
+    <div class="wrapper">
+        <main class="form-container">
+            <h2 class="form-title">Gestión de Categorías</h2>
+
+            <!-- Formulario para buscar una categoría por ID -->
+            <form id="buscarCategoriaForm" class="form">
+                <div class="form-group">
+                    <label for="buscarCategoriaId">Buscar por ID:</label>
+                    <input type="number" id="buscarCategoriaId" class="form-input" placeholder="ID de la categoría" required>
+                </div>
+                <button type="submit" class="submit-btn">Buscar Categoría</button>
+            </form>
+
+            <!-- Formulario para editar una categoría -->
+            <form id="editarCategoriaForm" class="form" style="display: none;">
+                <div class="form-group">
+                    <label for="editarNombreCategoria">Nombre de la Categoría</label>
+                    <input type="text" id="editarNombreCategoria" class="form-input" placeholder="Nombre" required>
+                </div>
+                <button type="submit" class="submit-btn">Guardar Cambios</button>
+                <button type="button" id="cancelarEdicionBtn" class="cancel-btn">Cancelar</button>
+            </form>
+
+            <!-- Botón para eliminar una categoría -->
+            <div id="eliminarCategoria" style="display: none;">
+                <button id="eliminarCategoriaBtn" class="delete-btn">Eliminar Categoría</button>
+            </div>
+
+            <!-- Lista de categorías existentes -->
+            <div id="listaCategorias" class="category-list">
+                <!-- Aquí se llenará dinámicamente con JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Archivo JavaScript para manejar la lógica del frontend -->
+    <script src="./js/categories.js"></script>
+</body>
+</html>
