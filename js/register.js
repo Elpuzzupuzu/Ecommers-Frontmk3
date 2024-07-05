@@ -1,3 +1,4 @@
+// Función para manejar el registro de usuario
 document.getElementById('crearUsuarioForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -35,6 +36,9 @@ document.getElementById('crearUsuarioForm').addEventListener('submit', async fun
         console.log('Success:', data);
         alert('Usuario creado exitosamente');
 
+        // Llamar a la función para crear un carrito para el usuario
+        await createCartForUser(data.id);
+
         // Limpiar los campos del formulario después de enviarlos
         document.getElementById('firstName').value = '';
         document.getElementById('lastName').value = '';
@@ -51,3 +55,27 @@ document.getElementById('crearUsuarioForm').addEventListener('submit', async fun
     }
 });
 
+// Función para crear un carrito para el usuario
+async function createCartForUser(userId) {
+    try {
+        const response = await fetch(`http://localhost:8080/cart/create?userId=${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al crear el carrito para el usuario');
+        }
+
+        const cart = await response.json();
+        console.log('Carrito creado exitosamente:', cart);
+
+        // Opcional: Guardar cart en localStorage si es necesario
+
+    } catch (error) {
+        console.error('Error al crear el carrito:', error);
+        alert('Hubo un problema al crear el carrito. Por favor, intenta más tarde.');
+    }
+}
