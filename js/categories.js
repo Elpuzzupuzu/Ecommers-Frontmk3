@@ -1,38 +1,38 @@
-// Función para manejar el envío del formulario de creación de categoría
-document.getElementById('crearCategoriaForm').addEventListener('submit', async function(e) {
+// Función para manejar el envío del formulario de búsqueda por ID
+document.getElementById('buscarCategoriaForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-
-    const nombreCategoria = document.getElementById('nombreCategoria').value;
-
-    try {
-        const response = await fetch('http://localhost:8080/categories/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name: nombreCategoria })
-        });
-
-        if (response.ok) {
-            const nuevaCategoria = await response.json();
-
-            // Limpiar el campo de entrada después de crear la categoría
-            document.getElementById('nombreCategoria').value = '';
-
-            // Mostrar mensaje de éxito
-            alert(`Categoría "${nuevaCategoria.name}" creada con éxito.`);
-            
-            // Actualizar la lista de categorías
-            await mostrarCategorias();
-
-        } else {
-            throw new Error('Error al crear la categoría.');
-        }
-    } catch (error) {
-        console.error('Error al crear la categoría:', error);
-        alert('Hubo un problema al intentar crear la categoría. Por favor, intenta más tarde.');
-    }
+    const categoriaId = document.getElementById('buscarCategoriaId').value;
+    await buscarCategoriaPorId(categoriaId);
 });
+
+// Función para buscar una categoría por ID
+async function buscarCategoriaPorId(categoriaId) {
+    try {
+        const response = await fetch(`http://localhost:8080/categories/${categoriaId}`);
+        if (!response.ok) {
+            throw new Error('Categoría no encontrada.');
+        }
+
+        const categoria = await response.json();
+        const listaCategorias = document.getElementById('listaCategorias');
+        listaCategorias.innerHTML = ''; // Limpiar la lista antes de añadir la nueva categoría
+
+        // Mostrar la categoría encontrada en la tabla
+        const categoriaItem = document.createElement('div');
+        categoriaItem.classList.add('category-item');
+        categoriaItem.innerHTML = `
+            <p><strong>ID:</strong> ${categoria.id}</p>
+            <p><strong>Nombre:</strong> ${categoria.name}</p>
+            <button class="edit-btn" onclick="editarCategoria(${categoria.id}, '${categoria.name}')">Editar</button>
+            <button class="delete-btn" onclick="eliminarCategoria(${categoria.id})">Eliminar</button>
+        `;
+        listaCategorias.appendChild(categoriaItem);
+
+    } catch (error) {
+        console.error('Error al buscar categoría por ID:', error);
+        alert('No se pudo encontrar la categoría. Verifica el ID e intenta nuevamente.');
+    }
+}
 
 // Función para mostrar todas las categorías existentes
 async function mostrarCategorias() {
@@ -44,9 +44,7 @@ async function mostrarCategorias() {
 
         const categorias = await response.json();
         const listaCategorias = document.getElementById('listaCategorias');
-
-        // Limpiar la lista antes de añadir las nuevas categorías
-        listaCategorias.innerHTML = '';
+        listaCategorias.innerHTML = ''; // Limpiar la lista antes de añadir las nuevas categorías
 
         // Mostrar cada categoría en la lista
         categorias.forEach(categoria => {
@@ -66,6 +64,46 @@ async function mostrarCategorias() {
         alert('Hubo un problema al intentar mostrar las categorías. Por favor, intenta más tarde.');
     }
 }
+
+// Función para crear una nueva categoría
+document.getElementById('crearCategoriaForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const nombreCategoria = document.getElementById('nombreCategoria').value.trim();
+
+    try {
+        const response = await fetch('http://localhost:8080/categories/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: nombreCategoria })
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al crear la categoría.');
+        }
+
+        // Mostrar mensaje de éxito
+        alert('Categoría creada correctamente.');
+
+        // Limpiar el campo y actualizar la lista de categorías
+        document.getElementById('nombreCategoria').value = '';
+        await mostrarCategorias();
+
+    } catch (error) {
+        console.error('Error al crear categoría:', error);
+        alert('Hubo un problema al intentar crear la categoría. Por favor, intenta más tarde.');
+    }
+});
+
+// Función para cargar todas las categorías al hacer clic en el nuevo botón
+document.getElementById('cargarTodasBtn').addEventListener('click', async function() {
+    // Limpiar el campo de búsqueda por ID
+    document.getElementById('buscarCategoriaId').value = '';
+
+    // Mostrar todas las categorías
+    await mostrarCategorias();
+});
 
 // Función para editar una categoría
 async function editarCategoria(categoriaId, nombreCategoria) {
