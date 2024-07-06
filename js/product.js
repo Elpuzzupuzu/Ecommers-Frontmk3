@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const buscarProductoForm = document.getElementById('buscarProductoForm');
     const listaProductos = document.getElementById('listaProductos');
     const recargarProductosBtn = document.getElementById('recargarProductos');
+    const crearProductoForm = document.getElementById('crearProductoForm');
 
     // Cargar todos los productos al cargar la página
     cargarProductos();
@@ -17,6 +18,20 @@ document.addEventListener('DOMContentLoaded', () => {
     recargarProductosBtn.addEventListener('click', () => {
         cargarProductos();
         limpiarInputBuscar();
+    });
+
+    // Escuchar el envío del formulario de creación de producto
+    crearProductoForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nuevoProducto = {
+            
+            img: document.getElementById('img').value.trim(),
+            name: document.getElementById('nombre').value.trim(),
+            description: document.getElementById('descripcion').value.trim(),
+            price: parseFloat(document.getElementById('precio').value.trim()),
+            stock: parseInt(document.getElementById('stock').value.trim())
+        };
+        await crearProducto(nuevoProducto);
     });
 
     // Función para cargar todos los productos
@@ -49,6 +64,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
+    // Función para crear un nuevo producto
+    async function crearProducto(nuevoProducto) {
+        try {
+            const response = await fetch('http://localhost:8080/products/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(nuevoProducto)
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al crear el producto.');
+            }
+
+            const productoCreado = await response.json();
+            alert('Producto creado correctamente.');
+            limpiarFormularioCrear();
+            cargarProductos(); // Volver a cargar todos los productos después de crear uno nuevo
+        } catch (error) {
+            console.error('Error al crear producto:', error);
+            alert('Hubo un problema al intentar crear el producto. Por favor, intenta más tarde.');
+        }
+    }
+
+
+
     // Función para mostrar un único producto en la tabla
     function mostrarProductoEnTabla(producto) {
         listaProductos.innerHTML = ''; // Limpiar la tabla antes de agregar el producto buscado
@@ -56,6 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const productoItem = document.createElement('div');
         productoItem.classList.add('producto-item');
         productoItem.innerHTML = `
+            
+            <p><strong>Imagen: <img src="${producto.img}" alt="Descripción de la imagen" style="width: 400px; height: 250px;"></strong></p>
             <p><strong>ID:</strong> ${producto.id}</p>
             <p><strong>Nombre:</strong> ${producto.name}</p>
             <p><strong>Precio:</strong> ${producto.price}</p>
@@ -69,28 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
         eliminarBtn.addEventListener('click', async () => {
             await eliminarProducto(producto.id);
         });
-    }
-
-    // Función para eliminar un producto
-    async function eliminarProducto(productoId) {
-        try {
-            const confirmacion = confirm('¿Estás seguro de eliminar este producto?');
-            if (confirmacion) {
-                const response = await fetch(`http://localhost:8080/products/delete/${productoId}`, {
-                    method: 'DELETE'
-                });
-
-                if (!response.ok) {
-                    throw new Error('Error al eliminar el producto.');
-                }
-
-                alert('Producto eliminado correctamente.');
-                cargarProductos(); // Volver a cargar todos los productos después de eliminar
-            }
-        } catch (error) {
-            console.error('Error al eliminar producto:', error);
-            alert('Hubo un problema al intentar eliminar el producto. Por favor, intenta más tarde.');
-        }
     }
 
     // Función para mostrar la lista de productos
@@ -120,5 +143,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Función para limpiar el campo de búsqueda por ID
     function limpiarInputBuscar() {
         document.getElementById('buscarProductoId').value = '';
+    }
+
+    // Función para limpiar el formulario de creación de producto
+    function limpiarFormularioCrear() {
+        document.getElementById('nombre').value = '';
+        document.getElementById('descripcion').value = '';
+        document.getElementById('precio').value = '';
+        document.getElementById('stock').value = '';
     }
 });

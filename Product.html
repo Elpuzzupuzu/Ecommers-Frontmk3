@@ -1,22 +1,58 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscar Producto por ID</title>
-    <link rel="stylesheet" href="/css/product.css">
+    <title>Gestión de Productos</title>
+    <link rel="stylesheet" href="/css/product.css"> <!-- Asegúrate de incluir tu archivo CSS aquí -->
 </head>
 <body>
-    <h1>Buscar Producto por ID</h1>
-    <form id="buscarProductoForm">
-        <label for="buscarProductoId">Buscar por ID:</label>
-        <input type="text" id="buscarProductoId" name="buscarProductoId" required>
-        <button type="submit">Buscar</button>
-        <button type="button" id="recargarProductos">Recargar Productos</button>
-    </form>
+    <div class="wrapper">
+        <h1>Gestión de Productos</h1>
 
-    <div id="listaProductos"></div>
+        <!-- Formulario para buscar productos por ID -->
+        <form id="buscarProductoForm">
+            <label for="buscarProductoId">Buscar Producto por ID:</label>
+            <input type="text" id="buscarProductoId" name="buscarProductoId" required>
+            <button type="submit">Buscar</button>
+        </form>
 
-    <script src="/js/product.js"></script>
+        <!-- Lista de Productos -->
+        <div id="listaProductos" class="productos-lista">
+            <!-- Aquí se mostrarán los productos -->
+        </div>
+
+        <!-- Botón para recargar todos los productos -->
+        <button id="recargarProductos">Recargar Productos</button>
+
+        <!-- Formulario para crear un nuevo producto -->
+        <h2>Crear Nuevo Producto</h2>
+        <form id="crearProductoForm">
+            <div class="form-group">
+                <label for="imagen">Imagen:</label>
+                <input type="text" id="imagen" name="imagen" required>
+            </div>
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" name="descripcion" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="precio">Precio:</label>
+                <input type="number" id="precio" name="precio" step="0.01" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="stock">Stock:</label>
+                <input type="number" id="stock" name="stock" min="0" required>
+            </div>
+            <button type="submit">Crear Producto</button>
+        </form>
+    </div>
+
+    <!-- Tu script JavaScript -->
+    <script src="/js/product.js"></script> <!-- Asegúrate de cambiar "tu_script.js" por el nombre de tu archivo JS -->
 </body>
 </html>
