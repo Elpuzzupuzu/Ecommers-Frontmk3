@@ -1,0 +1,31 @@
+/* Estilos opcionales */
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+#buscarProductoForm {
+    margin-bottom: 20px;
+}
+
+#listaProductos {
+    margin-top: 20px;
+}
+
+.producto-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.eliminar-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}

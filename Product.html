@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Producto por ID</title>
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+<body>
+    <h1>Buscar Producto por ID</h1>
+    <form id="buscarProductoForm">
+        <label for="buscarProductoId">Buscar por ID:</label>
+        <input type="text" id="buscarProductoId" name="buscarProductoId" required>
+        <button type="submit">Buscar</button>
+        <button type="button" id="recargarProductos">Recargar Productos</button>
+    </form>
+
+    <div id="listaProductos"></div>
+
+    <script src="/js/product.js"></script>
+</body>
+</html>
