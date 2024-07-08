@@ -23,15 +23,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // Escuchar el envío del formulario de creación de producto
     crearProductoForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const nuevoProducto = {
-            
-            img: document.getElementById('img').value.trim(),
-            name: document.getElementById('nombre').value.trim(),
-            description: document.getElementById('descripcion').value.trim(),
-            price: parseFloat(document.getElementById('precio').value.trim()),
-            stock: parseInt(document.getElementById('stock').value.trim())
-        };
-        await crearProducto(nuevoProducto);
+
+        const imagen = document.getElementById('imagen').value.trim();
+        const id_categoria = document.getElementById('id_categoria').value.trim();
+        const nombre = document.getElementById('nombre').value.trim();
+        const descripcion = document.getElementById('descripcion').value.trim();
+        const precio = document.getElementById('precio').value.trim();
+        const stock = document.getElementById('stock').value.trim();
+
+        // Validar que todos los campos estén llenos
+        if (imagen && id_categoria && nombre && descripcion && precio && stock) {
+            const nuevoProducto = {
+                img: imagen,
+                id_category: parseInt(id_categoria),
+                name: nombre,
+                description: descripcion,
+                price: parseFloat(precio),
+                stock: parseInt(stock)
+            };
+            await crearProducto(nuevoProducto);
+        } else {
+            alert('Por favor, complete todos los campos del formulario.');
+        }
     });
 
     // Función para cargar todos los productos
@@ -54,16 +67,18 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(`http://localhost:8080/products/${productoId}`);
             if (!response.ok) {
-                throw new Error('Producto no encontrado.');
+                throw new Error('Producto no encontrado o error en la solicitud.');
             }
-            const producto = await response.json();
-            mostrarProductoEnTabla(producto);
+            const json = await response.json();
+            if (!json) {
+                throw new Error('Respuesta vacía del servidor.');
+            }
+            mostrarProductoEnTabla(json);
         } catch (error) {
             console.error('Error al buscar producto por ID:', error);
-            alert('No se pudo encontrar el producto. Verifica el ID e intenta nuevamente.');
+            alert('No se pudo encontrar el producto o hubo un problema en la solicitud.');
         }
     }
-
 
     // Función para crear un nuevo producto
     async function crearProducto(nuevoProducto) {
@@ -90,8 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-
-
     // Función para mostrar un único producto en la tabla
     function mostrarProductoEnTabla(producto) {
         listaProductos.innerHTML = ''; // Limpiar la tabla antes de agregar el producto buscado
@@ -99,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const productoItem = document.createElement('div');
         productoItem.classList.add('producto-item');
         productoItem.innerHTML = `
-            
             <p><strong>Imagen: <img src="${producto.img}" alt="Descripción de la imagen" style="width: 400px; height: 250px;"></strong></p>
             <p><strong>ID:</strong> ${producto.id}</p>
             <p><strong>Nombre:</strong> ${producto.name}</p>
@@ -147,9 +159,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para limpiar el formulario de creación de producto
     function limpiarFormularioCrear() {
+        document.getElementById('imagen').value = '';
+        document.getElementById('id_categoria').value = '';
         document.getElementById('nombre').value = '';
         document.getElementById('descripcion').value = '';
         document.getElementById('precio').value = '';
         document.getElementById('stock').value = '';
+    }
+
+    // Función para eliminar un producto
+    async function eliminarProducto(productoId) {
+        try {
+            const response = await fetch(`http://localhost:8080/products/${productoId}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                throw new Error('Error al eliminar el producto.');
+            }
+            alert('Producto eliminado correctamente.');
+            cargarProductos(); // Volver a cargar todos los productos después de eliminar uno
+        } catch (error) {
+            console.error('Error al eliminar producto:', error);
+            alert('Hubo un problema al intentar eliminar el producto. Por favor, intenta más tarde.');
+        }
     }
 });
