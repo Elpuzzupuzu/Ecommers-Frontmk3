@@ -250,6 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const productoItem = document.createElement('div');
             productoItem.classList.add('producto-item');
             productoItem.innerHTML = `
+                <p><strong>img:</strong> <img src="${producto.img}" alt="Descripción de la imagen" style="max-width: 25%; height: auto;"></p>
                 <p><strong>ID:</strong> ${producto.id}</p>
                 <p><strong>Nombre:</strong> ${producto.name}</p>
                 <p><strong>Descripcion:</strong> ${producto.description}</p>

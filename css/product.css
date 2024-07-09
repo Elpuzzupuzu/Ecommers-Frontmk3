@@ -1,5 +1,4 @@
-/* Estilos para la página de gestión de productos */
-
+/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -16,74 +15,59 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-container {
-    padding: 20px;
-}
-
-.form-title {
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-}
-
-.form {
+/* Estilos para el formulario de búsqueda y listado de productos */
+#buscarProductoForm {
     margin-bottom: 20px;
 }
 
-.form-group {
+.productos-lista {
+    margin-top: 20px;
+}
+
+.producto-item {
+    padding: 10px;
     margin-bottom: 10px;
-}
-
-.form-input {
-    width: 100%;
-    padding: 8px;
-    font-size: 16px;
+    background-color: #f8f9fa;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-.submit-btn {
-    padding: 10px 20px;
+.producto-item p {
+    margin: 5px 0;
+}
+
+.producto-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.producto-item .eliminar-btn,
+.producto-item .editar-btn {
+    padding: 8px 16px;
+    margin-top: 5px;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.submit-btn:hover {
+.producto-item .eliminar-btn:hover,
+.producto-item .editar-btn:hover {
     background-color: #0056b3;
 }
 
-.cancel-btn {
-    padding: 10px 20px;
-    background-color: #6c757d;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 10px;
+.producto-item .editar-btn {
+    background-color: #28a745;
 }
 
-.cancel-btn:hover {
-    background-color: #5a6268;
-}
-
-.delete-btn {
-    padding: 8px 16px;
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.delete-btn:hover {
-    background-color: #c82333;
+.producto-item .editar-btn:hover {
+    background-color: #218838;
 }
 
 /* Estilos para el formulario de creación de productos */
-
 #crearProductoForm {
     margin-top: 20px;
 }
@@ -130,3 +114,17 @@ body {
     background-color: #218838;
 }
 
+/* Estilos para los botones generales */
+.button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
