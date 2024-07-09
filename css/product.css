@@ -37,7 +37,7 @@ body {
 }
 
 .producto-item img {
-    max-width: 100%;
+    max-width: 25%;   /*  ESTE CSS MODIFICA LAS DIMENSIONES DE LA IMAGEN AL BUSCAR POR ID  */
     height: auto;
     border-radius: 4px;
 }

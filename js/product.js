@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const listaProductos = document.getElementById('listaProductos');
     const recargarProductosBtn = document.getElementById('recargarProductos');
     const crearProductoForm = document.getElementById('crearProductoForm');
+    let editarProductoForm = null; // Variable para mantener referencia al formulario de edición
 
     // Cargar todos los productos al cargar la página
     cargarProductos();
@@ -112,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const productoItem = document.createElement('div');
         productoItem.classList.add('producto-item');
         productoItem.innerHTML = `
-            <p><strong>Imagen: <img src="${producto.img}" alt="Descripción de la imagen" style="width: 400px; height: 250px;"></strong></p>
+            <p><strong>Imagen:</strong> <img src="${producto.img}" alt="Descripción de la imagen" style="max-width: 25%; height: auto;"></p>
             <p><strong>ID:</strong> ${producto.id}</p>
             <p><strong>Nombre:</strong> ${producto.name}</p>
             <p><strong>Precio:</strong> ${producto.price}</p>
@@ -137,7 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para abrir el formulario de edición con los datos del producto seleccionado
     function abrirFormularioEdicion(producto) {
-        const editarProductoForm = document.createElement('form');
+        // Crear el formulario de edición
+        editarProductoForm = document.createElement('form');
         editarProductoForm.id = 'editarProductoForm';
 
         editarProductoForm.innerHTML = `
@@ -192,8 +194,9 @@ document.addEventListener('DOMContentLoaded', () => {
             editarProductoForm.remove(); // Eliminar el formulario de edición
         });
 
-        // Reemplazar el formulario de creación con el formulario de edición
-        crearProductoForm.replaceWith(editarProductoForm);
+        // Mostrar el formulario de edición al lado derecho del producto
+        const productoItem = listaProductos.querySelector(`.producto-item[data-id="${producto.id}"]`);
+        productoItem.appendChild(editarProductoForm);
     }
 
     // Función para editar un producto
@@ -217,43 +220,44 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error al editar producto:', error);
             alert('Hubo un problema al intentar editar el producto. Por favor, intenta más tarde.');
+        } finally {
+            editarProductoForm.remove(); // Eliminar el formulario de edición
         }
     }
 
     // Función para eliminar un producto
-    async function eliminarProducto(productId) {
-        if (!confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-            return;
-        }
+    async function eliminarProducto(productoId) {
+        if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+            try {
+                const response = await fetch(`http://localhost:8080/products/delete/${productoId}`, {
+                    method: 'DELETE'
+                });
 
-        try {
-            const response = await fetch(`http://localhost:8080/products/delete/${productId}`, {
-                method: 'DELETE'
-            });
+                if (!response.ok) {
+                    throw new Error('Error al eliminar el producto.');
+                }
 
-            if (!response.ok) {
-                throw new Error('Error al eliminar el producto.');
+                alert('Producto eliminado correctamente.');
+                cargarProductos(); // Volver a cargar todos los productos después de eliminar uno
+            } catch (error) {
+                console.error('Error al eliminar producto:', error);
+                alert('Hubo un problema al intentar eliminar el producto. Por favor, intenta más tarde.');
             }
-
-            alert('Producto eliminado correctamente.');
-            cargarProductos(); // Volver a cargar todos los productos después de eliminar uno
-        } catch (error) {
-            console.error('Error al eliminar producto:', error);
-            alert('Hubo un problema al intentar eliminar el producto. Por favor, intenta más tarde.');
         }
     }
 
-    // Función para mostrar la lista de productos
+    // Función para mostrar todos los productos en la tabla
     function mostrarProductos(productos) {
-        listaProductos.innerHTML = '';
+        listaProductos.innerHTML = ''; // Limpiar la tabla antes de agregar productos
+
         productos.forEach(producto => {
             const productoItem = document.createElement('div');
             productoItem.classList.add('producto-item');
+            productoItem.setAttribute('data-id', producto.id);
             productoItem.innerHTML = `
-                <p><strong>img:</strong> <img src="${producto.img}" alt="Descripción de la imagen" style="max-width: 25%; height: auto;"></p>
+                <p><strong>Imagen:</strong> <img src="${producto.img}" alt="Descripción de la imagen" style="max-width: 25%; height: auto;"></p>
                 <p><strong>ID:</strong> ${producto.id}</p>
                 <p><strong>Nombre:</strong> ${producto.name}</p>
-                <p><strong>Descripcion:</strong> ${producto.description}</p>
                 <p><strong>Precio:</strong> ${producto.price}</p>
                 <p><strong>Stock:</strong> ${producto.stock}</p>
                 <button class="eliminar-btn" data-id="${producto.id}">Eliminar</button>
@@ -275,13 +279,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Función para limpiar el input de búsqueda
-    function limpiarInputBuscar() {
-        document.getElementById('buscarProductoId').value = '';
-    }
-
     // Función para limpiar el formulario de creación de producto
     function limpiarFormularioCrear() {
-        document.getElementById('crearProductoForm').reset();
+        document.getElementById('imagen').value = '';
+        document.getElementById('id_categoria').value = '';
+        document.getElementById('nombre').value = '';
+        document.getElementById('descripcion').value = '';
+        document.getElementById('precio').value = '';
+        document.getElementById('stock').value = '';
+    }
+
+    // Función para limpiar el campo de búsqueda
+    function limpiarInputBuscar() {
+        document.getElementById('buscarProductoId').value = '';
     }
 });
