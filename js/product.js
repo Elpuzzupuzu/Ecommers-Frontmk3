@@ -118,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <p><strong>Precio:</strong> ${producto.price}</p>
             <p><strong>Stock:</strong> ${producto.stock}</p>
             <button class="eliminar-btn" data-id="${producto.id}">Eliminar</button>
+            <button class="editar-btn" data-id="${producto.id}">Editar</button>
         `;
         listaProductos.appendChild(productoItem);
 
@@ -126,6 +127,120 @@ document.addEventListener('DOMContentLoaded', () => {
         eliminarBtn.addEventListener('click', async () => {
             await eliminarProducto(producto.id);
         });
+
+        // Agregar evento para el botón de editar
+        const editarBtn = productoItem.querySelector('.editar-btn');
+        editarBtn.addEventListener('click', () => {
+            abrirFormularioEdicion(producto);
+        });
+    }
+
+    // Función para abrir el formulario de edición con los datos del producto seleccionado
+    function abrirFormularioEdicion(producto) {
+        const editarProductoForm = document.createElement('form');
+        editarProductoForm.id = 'editarProductoForm';
+
+        editarProductoForm.innerHTML = `
+            <h2>Editar Producto</h2>
+            <input type="hidden" id="editarProductoId" value="${producto.id}">
+            <div class="form-group">
+                <label for="editarImagen">Imagen:</label>
+                <input type="text" id="editarImagen" name="editarImagen" value="${producto.img}" required>
+            </div>
+            <div class="form-group">
+                <label for="editarIdCategoria">Id del producto:</label>
+                <input type="number" id="editarIdCategoria" name="editarIdCategoria" value="${producto.id_category}" required>
+            </div>
+            <div class="form-group">
+                <label for="editarNombre">Nombre:</label>
+                <input type="text" id="editarNombre" name="editarNombre" value="${producto.name}" required>
+            </div>
+            <div class="form-group">
+                <label for="editarDescripcion">Descripción:</label>
+                <textarea id="editarDescripcion" name="editarDescripcion" rows="3" required>${producto.description}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="editarPrecio">Precio:</label>
+                <input type="number" id="editarPrecio" name="editarPrecio" step="0.01" min="0" value="${producto.price}" required>
+            </div>
+            <div class="form-group">
+                <label for="editarStock">Stock:</label>
+                <input type="number" id="editarStock" name="editarStock" min="0" value="${producto.stock}" required>
+            </div>
+            <button type="submit">Guardar Cambios</button>
+            <button type="button" id="cancelarEdicion">Cancelar</button>
+        `;
+
+        // Escuchar el envío del formulario de edición
+        editarProductoForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const productoEditado = {
+                id: parseInt(document.getElementById('editarProductoId').value),
+                img: document.getElementById('editarImagen').value.trim(),
+                id_category: parseInt(document.getElementById('editarIdCategoria').value),
+                name: document.getElementById('editarNombre').value.trim(),
+                description: document.getElementById('editarDescripcion').value.trim(),
+                price: parseFloat(document.getElementById('editarPrecio').value),
+                stock: parseInt(document.getElementById('editarStock').value)
+            };
+            await editarProducto(productoEditado);
+        });
+
+        // Escuchar el clic en el botón de cancelar
+        const cancelarBtn = editarProductoForm.querySelector('#cancelarEdicion');
+        cancelarBtn.addEventListener('click', () => {
+            editarProductoForm.remove(); // Eliminar el formulario de edición
+        });
+
+        // Reemplazar el formulario de creación con el formulario de edición
+        crearProductoForm.replaceWith(editarProductoForm);
+    }
+
+    // Función para editar un producto
+    async function editarProducto(productoEditado) {
+        try {
+            const response = await fetch(`http://localhost:8080/products/update/${productoEditado.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productoEditado)
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al editar el producto.');
+            }
+
+            const productoActualizado = await response.json();
+            alert('Producto actualizado correctamente.');
+            cargarProductos(); // Volver a cargar todos los productos después de editar uno
+        } catch (error) {
+            console.error('Error al editar producto:', error);
+            alert('Hubo un problema al intentar editar el producto. Por favor, intenta más tarde.');
+        }
+    }
+
+    // Función para eliminar un producto
+    async function eliminarProducto(productId) {
+        if (!confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8080/products/delete/${productId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al eliminar el producto.');
+            }
+
+            alert('Producto eliminado correctamente.');
+            cargarProductos(); // Volver a cargar todos los productos después de eliminar uno
+        } catch (error) {
+            console.error('Error al eliminar producto:', error);
+            alert('Hubo un problema al intentar eliminar el producto. Por favor, intenta más tarde.');
+        }
     }
 
     // Función para mostrar la lista de productos
@@ -141,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p><strong>Precio:</strong> ${producto.price}</p>
                 <p><strong>Stock:</strong> ${producto.stock}</p>
                 <button class="eliminar-btn" data-id="${producto.id}">Eliminar</button>
+                <button class="editar-btn" data-id="${producto.id}">Editar</button>
             `;
             listaProductos.appendChild(productoItem);
 
@@ -149,38 +265,22 @@ document.addEventListener('DOMContentLoaded', () => {
             eliminarBtn.addEventListener('click', async () => {
                 await eliminarProducto(producto.id);
             });
+
+            // Agregar evento para el botón de editar
+            const editarBtn = productoItem.querySelector('.editar-btn');
+            editarBtn.addEventListener('click', () => {
+                abrirFormularioEdicion(producto);
+            });
         });
     }
 
-    // Función para limpiar el campo de búsqueda por ID
+    // Función para limpiar el input de búsqueda
     function limpiarInputBuscar() {
         document.getElementById('buscarProductoId').value = '';
     }
 
     // Función para limpiar el formulario de creación de producto
     function limpiarFormularioCrear() {
-        document.getElementById('imagen').value = '';
-        document.getElementById('id_categoria').value = '';
-        document.getElementById('nombre').value = '';
-        document.getElementById('descripcion').value = '';
-        document.getElementById('precio').value = '';
-        document.getElementById('stock').value = '';
-    }
-
-    // Función para eliminar un producto
-    async function eliminarProducto(productoId) {
-        try {
-            const response = await fetch(`http://localhost:8080/products/${productoId}`, {
-                method: 'DELETE'
-            });
-            if (!response.ok) {
-                throw new Error('Error al eliminar el producto.');
-            }
-            alert('Producto eliminado correctamente.');
-            cargarProductos(); // Volver a cargar todos los productos después de eliminar uno
-        } catch (error) {
-            console.error('Error al eliminar producto:', error);
-            alert('Hubo un problema al intentar eliminar el producto. Por favor, intenta más tarde.');
-        }
+        document.getElementById('crearProductoForm').reset();
     }
 });
