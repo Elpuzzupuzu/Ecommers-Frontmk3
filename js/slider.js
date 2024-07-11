@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let productosEnCarrito = [];
     let productos = []; // Variable para almacenar los productos obtenidos del backend
 
+    // Función para obtener todos los productos desde el backend
     async function getAllProducts(page, size) {
         try {
             const response = await fetch(`${baseUrl}?page=${page}&size=${size}`);
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Función para mostrar los productos en la página
     function displayProducts(productsPage) {
         const productsContainer = document.getElementById('products-container');
         productsContainer.innerHTML = ''; // Limpiamos el contenedor
@@ -51,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <i class="fa-solid fa-code-compare"></i>
                         </span>
                     </div>
-                </div>  <!--testing-->
+                </div>
                 <div class="content-card-product">
                     <div class="stars">
                         <i class="fa-solid fa-star"></i>
@@ -64,15 +66,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     <button class="add-cart" id="${product.id}">
                         <i class="fa-solid fa-basket-shopping"></i>
                     </button>
-                    <p class="price">$${product.price}  <span></span></p>
+                    <p class="price">$${product.price} <span></span></p>
                     <p class="stock">${product.stock} en stock</p>
                 </div>
-            </div><!--fin card product-->
+            </div>
             `;
             
             productsContainer.appendChild(productCard);
 
-            // Agregar evento click al botón de agregar
+            // Agregar evento click al botón de agregar al carrito
             productCard.querySelector('.add-cart').addEventListener('click', function(e) {
                 e.preventDefault(); // Prevenir comportamiento por defecto del botón
                 agregarAlCarrito(e, productos); // Llama a la función agregarAlCarrito pasando el evento y productos
@@ -87,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('nextPage').disabled = productsPage.number + 1 >= productsPage.totalPages;
     }
 
+    // Botón de página anterior
     document.getElementById('prevPage').addEventListener('click', function() {
         if (currentPage > 0) {
             currentPage--;
@@ -94,6 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Botón de página siguiente
     document.getElementById('nextPage').addEventListener('click', function() {
         currentPage++;
         getAllProducts(currentPage, pageSize);
@@ -110,6 +114,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (productoEnCarrito) {
                 // Si el producto ya está en el carrito, aumentar la cantidad vendida
                 productoEnCarrito.sold++;
+
+                // Guardar productos en el carrito en localStorage después de modificar
+                localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
             } else {
                 // Si el producto no está en el carrito, agregarlo con la cantidad vendida inicial de 1
                 productoAgregado.sold = 1;

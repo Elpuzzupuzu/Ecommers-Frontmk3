@@ -37,7 +37,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
             }
 
             // Redirigir al usuario a la página principal
-            window.location.href = 'index.html';
+            window.location.href = 'Slider.html';
         } else {
             alert('Credenciales incorrectas, por favor intenta de nuevo.');
         }
