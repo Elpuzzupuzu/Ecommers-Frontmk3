@@ -785,15 +785,35 @@ html{
     font-weight: 600;
 }
 
-.content-card-product .price{
+
+
+
+.content-card-product .price {
     font-size: 1.5rem;
     font-weight: 400;
-    text-decoration: line-through;
     color: #000;
     margin-left: .5rem;
+    animation: destello 2s infinite; /* Ajustamos la duración a 2 segundos */
+}
+
+/**----------**/
+
+  
+@keyframes destello {
+    0% {
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    50% {
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+    }
+    100% {
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
 }
 
 
+
+/**---------**/
 
 
 

@@ -36,8 +36,8 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
                 await handleCartId(userId);
             }
 
-            // Redirigir al usuario a la página principal
-            window.location.href = 'Slider.html';
+            // Redirigir al usuario a la página principal      INGRESAR A LA TIENDA
+            window.location.href = 'index.html';
         } else {
             alert('Credenciales incorrectas, por favor intenta de nuevo.');
         }

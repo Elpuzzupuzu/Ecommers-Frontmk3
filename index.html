@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tienda</title>
-    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/slider.css">
 </head>
 <body>
     <header>
@@ -120,28 +120,27 @@
                 <button id="pow"  class="boton-menu boton-categoria "> pow</button>
                 <button id="Terraria"  class="boton-menu boton-categoria "> Terraria</button>
                 <a class="boton-menu boton-carrito active"  href="./carrito.html"><i class="fa-solid fa-cart-shopping"></i>carrito <span id="numerito"  class="numerito">0</span></a>
-
-                
-               
+   
+             <!-- SECCION DE PRODUCTOS SLIDER -->
             </div>
 
-            <div class="container-products" id="container-products">
+            <div class="products-container" id="products-container">
                 <!--aqui van los productos -->
-
-
-                <div class="pagination">
-                    <button id="prevPage">Previous</button>
-                    <p id="pageInfo"></p>
-                    <button id="nextPage">Next</button>
-                </div>
-
-
-               
+     
 
             </div> <!--fin seccion de productos-->
+
+            <div class="pagination">
+                <button id="prevPage">Previous</button>
+                <p id="pageInfo"></p>
+                <button id="nextPage">Next</button>
+            </div>
+
+
+
         </section>
 
-        <!--galeria-->
+        <!--galeria--> <!-- class=galelery img-->
         <section class="gallery">
             <img class="gallery img-1" src="/img/img12.jpg"></img>
             <img class="gallery-img-2"  src="/img/img11.jpg"></img>
@@ -286,6 +285,8 @@
             </div> <!--fin seccion de productos-->
    
         </section>
+
+        
 
         <section class="container blogs">
             <h1 class="heading-1">ultimos blogs</h1>
@@ -447,7 +448,7 @@
     
      
     <script src="https://kit.fontawesome.com/81581fb069.js" crossorigin="anonymous"></script>
-    <script src="/js/main.js"></script>
+    <script src="/js/slider.js"></script>
     
 </body>
 </html>
