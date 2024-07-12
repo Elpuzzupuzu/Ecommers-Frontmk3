@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function() {
             slider.style.transform = `translateX(-${index * slideWidth}px)`;
         }
 
-        setInterval(nextSlide, 1500); // Cambia de slide cada 3 segundos
+        setInterval(nextSlide, 2000); // Cambia de slide cada 3 segundos
     }
 
     // Cargar las imágenes al inicio
