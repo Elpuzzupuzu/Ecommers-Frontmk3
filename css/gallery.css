@@ -24,16 +24,15 @@ body {
 
 .slide {
     width: 100%; /* Ancho completo de cada slide */
+    height: 300px; /* Altura fija para cada slide */
     flex: 0 0 auto; /* No se ajusta automáticamente */
     overflow: hidden; /* Oculta contenido que sobresale */
     position: relative; /* Asegura que las imágenes se posicionen correctamente */
-    text-align: center; /* Centra las imágenes horizontalmente */
 }
 
 .slide img {
-    max-width: 100%; /* Ancho máximo del 100% */
-    height: auto; /* Mantiene la proporción de la imagen */
-    object-fit: contain; /* Contiene la imagen dentro del slide */
-    display: inline-block; /* Asegura que la imagen se muestre como bloque */
-    vertical-align: middle; /* Alinea verticalmente la imagen */
+    width: 100%; /* Ancho al 100% del contenedor */
+    height: 100%; /* Altura al 100% del contenedor */
+    object-fit: contain; /* Ajusta la imagen dentro del slide sin distorsionar */
+    display: block; /* Asegura que la imagen se muestre como bloque */
 }
