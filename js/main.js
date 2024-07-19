@@ -1,3 +1,4 @@
+
 // Función para obtener los productos resumidos por categoría
 async function getProductSummariesByCategory(categoryName) {
     try {
@@ -13,116 +14,6 @@ async function getProductSummariesByCategory(categoryName) {
         return [];
     }
 }
-
-//---------------------------TESTING-------------------------/////////
-
-const baseUrl = 'http://localhost:8080/products/page'; // Reemplaza con la URL de tu servidor Spring Boot
-    let currentPage = 0;
-    const pageSize = 5;
-
-    function getAllProducts(page, size) {
-        fetch(`${baseUrl}?page=${page}&size=${size}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                displayProducts(data);
-            })
-            .catch(error => console.error('Error fetching products:', error));
-    }
-
-
-    function displayProducts(productsPage) {
-        const productsContainer = document.getElementById('container-products');
-        productsContainer.innerHTML = ''; // Limpiamos el contenedor
-
-        if (!productsPage.content || productsPage.content.length === 0) {
-            productsContainer.innerHTML = '<p>No products found.</p>';
-            return;
-        }
-
-        productsPage.content.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('product-card');
-            productCard.innerHTML = 
-            `
-           <div class="card-product">
-                    <div class="container-img">
-                        <img src="${product.img}" alt="illia">
-                        <span class="discount">-13%</span>
-                        <div class="button-group">
-                            <span>
-                                <i class="fa-solid fa-eye"></i>
-                            </span>
-                            <span>
-                                <i class="fa-regular fa-heart"></i>
-                            </span>
-                            <span>
-                                <i class="fa-solid fa-code-compare"></i>
-                            </span>
-                        </div>
-                     </div>  <!--testing-->
-                     <div class="content-card-product">
-                        <div class="stars">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-regular fa-star"></i>
-                        </div>
-                        <h3>${product.name}</h3>
-                        <button class="add-cart" id=${product.id}>
-                            <i class="fa-solid fa-basket-shopping"></i>
-                        </button>
-                        <p class="price">$${product.price}  <span></span></p>
-                        <P class="price">${product.stock}<span></span></p>
-                    </div>
-                </div><!--fin card product-->
-        `;
-             
-            productsContainer.appendChild(productCard);
-        });
-
-        // Información de paginación
-        const pageInfo = document.getElementById('pageInfo');
-        pageInfo.innerHTML = `Page ${productsPage.number + 1} of ${productsPage.totalPages}`;
-
-        document.getElementById('prevPage').disabled = productsPage.number === 0;
-        document.getElementById('nextPage').disabled = productsPage.number + 1 >= productsPage.totalPages;
-
-        actualizarBotonesAgregar();
-    }///fin paginacion
-
-
-    document.getElementById('prevPage').addEventListener('click', function() {
-        if (currentPage > 0) {
-            currentPage--;
-            getAllProducts(currentPage, pageSize);
-        }
-    });
-
-    document.getElementById('nextPage').addEventListener('click', function() {
-        currentPage++;
-        getAllProducts(currentPage, pageSize);
-    });
-
-    // Obtener la primera página con 5 productos
-    getAllProducts(currentPage, pageSize);
-
-
-
-
-
-
-
-
-
-
-
-//_____________________________________________________////
 
 // Función para obtener todos los productos resumidos
 async function getAllProductSummaries() {
@@ -141,9 +32,9 @@ async function getAllProductSummaries() {
 }
 
 // Variables globales
-const productos = [];
-let productosEnCarrito = JSON.parse(localStorage.getItem("productos-en-carrito")) || [];
-const numerito = document.querySelector("#numerito");
+// let productos = [];
+// let productosEnCarrito = JSON.parse(localStorage.getItem("productos-en-carrito")) || [];
+// const numerito = document.querySelector("#numerito");
 
 // Función para cargar los productos después de que el DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", async function() {
@@ -205,7 +96,7 @@ function actualizarTituloPrincipal(categoryName) {
 async function cargarTodosLosProductos() {
     try {
         const products = await getAllProductSummaries();
-        productos.splice(0, productos.length, ...products); // Limpiar y actualizar productos globales
+        productos = products; // Actualizar productos globales
         mostrarProductos(products);
     } catch (error) {
         console.error('Error cargando todos los productos:', error);
@@ -216,7 +107,7 @@ async function cargarTodosLosProductos() {
 async function cargarProductosPorCategoria(categoryName) {
     try {
         const products = await getProductSummariesByCategory(categoryName);
-        productos.splice(0, productos.length, ...products); // Limpiar y actualizar productos globales
+        productos = products; // Actualizar productos globales
         mostrarProductos(products);
     } catch (error) {
         console.error(`Error cargando productos por categoría ${categoryName}:`, error);
@@ -288,6 +179,31 @@ function actualizarBotonesAgregar() {
     });
 }
 
+
+
+
+
+
+
+// Función para guardar el carrito en localStorage
+
+const savelocalCarrito=() =>{
+    console.log(productosEnCarrito);
+localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito))
+
+}
+
+
+
+// Variables globales
+let productos = [];
+const numerito = document.querySelector("#numerito");
+
+
+
+
+
+
 // Función para agregar productos al carrito
 async function agregarAlCarrito(e) {
     const idBoton = parseInt(e.currentTarget.id, 10);
@@ -303,14 +219,14 @@ async function agregarAlCarrito(e) {
             // Si el producto no está en el carrito, agregarlo con la cantidad vendida inicial de 1
             productoAgregado.sold = 1;
             productosEnCarrito.push(productoAgregado);
-            console.log(`Producto agregado al carrito:`, productoAgregado);
+            savelocalCarrito();
 
-            // Guardar productos en el carrito en localStorage
-            localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
-
-            // Envía el producto al carrito en el backend
-            await agregarProductoAlCarrito(productoAgregado.id, 1); // Aquí 1 es la cantidad inicial
         }
+
+       
+
+        // Envía el producto al carrito en el backend
+        // await agregarProductoAlCarrito(productoAgregado.id, productoAgregado.sold);
 
         // Actualizar número de productos en el carrito después de modificarlo
         actualizarNumerito();
@@ -340,11 +256,14 @@ async function agregarProductoAlCarrito(productId, quantity) {
     }
 }
 
+
+
+
 // Función de inicialización
 async function initializeProductos() {
     try {
         const products = await getAllProductSummaries();
-        productos.push(...products);
+        productos = products;
         mostrarProductos(products);
     } catch (error) {
         console.error('Error initializing products:', error);

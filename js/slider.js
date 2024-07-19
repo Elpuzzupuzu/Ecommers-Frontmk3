@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const numerito = document.getElementById('numerito');
 
     // Array para almacenar productos en el carrito
-    let productosEnCarrito = [];
+    let productosEnCarrito = JSON.parse(window.localStorage.getItem("productos-en-carrito")) || [];
     let productos = []; // Variable para almacenar los productos obtenidos del backend
 
     // Función para obtener todos los productos desde el backend
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Agregar evento click al botón de agregar al carrito
             productCard.querySelector('.add-cart').addEventListener('click', function(e) {
                 e.preventDefault(); // Prevenir comportamiento por defecto del botón
-                agregarAlCarrito(e, productos); // Llama a la función agregarAlCarrito pasando el evento y productos
+                agregarAlCarrito(e); // Llama a la función agregarAlCarrito pasando el evento
             });
         });
 
@@ -103,8 +103,14 @@ document.addEventListener('DOMContentLoaded', function() {
         getAllProducts(currentPage, pageSize);
     });
 
+    // Función para guardar el carrito en localStorage
+    const saveLocalCarrito = () => {
+        console.log(productosEnCarrito);
+        localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+    };
+
     // Función para agregar productos al carrito
-    async function agregarAlCarrito(e, productos) {
+    function agregarAlCarrito(e) {
         const idBoton = parseInt(e.currentTarget.id, 10);
         const productoAgregado = productos.find(producto => producto.id === idBoton);
 
@@ -114,21 +120,17 @@ document.addEventListener('DOMContentLoaded', function() {
             if (productoEnCarrito) {
                 // Si el producto ya está en el carrito, aumentar la cantidad vendida
                 productoEnCarrito.sold++;
-
-                // Guardar productos en el carrito en localStorage después de modificar
-                localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
             } else {
                 // Si el producto no está en el carrito, agregarlo con la cantidad vendida inicial de 1
                 productoAgregado.sold = 1;
                 productosEnCarrito.push(productoAgregado);
-                console.log(`Producto agregado al carrito:`, productoAgregado);
-
-                // Guardar productos en el carrito en localStorage
-                localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
-
-                // Envía el producto al carrito en el backend
-                await agregarProductoAlCarrito(productoAgregado.id, 1); // Aquí 1 es la cantidad inicial
+                saveLocalCarrito();
             }
+
+            saveLocalCarrito();
+
+            // Envía el producto al carrito en el backend
+            // await agregarProductoAlCarrito(productoAgregado.id, productoAgregado.sold);
 
             // Actualizar número de productos en el carrito después de modificarlo
             actualizarNumerito();
@@ -136,6 +138,9 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error(`Producto con ID ${idBoton} no encontrado`);
         }
     }
+
+
+
 
     // Función para enviar el producto al carrito en el backend
     async function agregarProductoAlCarrito(productId, quantity) {
@@ -156,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error al agregar producto al carrito en el backend:', error);
             alert('Error al agregar producto al carrito');
         }
-    }
+    }   /// REVISAR LA LOGICA
 
     // Función para actualizar el número de productos en el carrito
     function actualizarNumerito() {
