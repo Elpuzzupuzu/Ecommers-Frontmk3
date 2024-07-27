@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const saveLocalCarrito = () => {
         console.log(productosEnCarrito);
         localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+        
     };
 
     // Función para agregar productos al carrito
@@ -162,6 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Error al agregar producto al carrito');
         }
     }   /// REVISAR LA LOGICA
+
+    
 
     // Función para actualizar el número de productos en el carrito
     function actualizarNumerito() {
