@@ -1,3 +1,15 @@
+// Verificar si el usuario está autenticado
+const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+if (!userInfo) {
+    // Si el usuario no está autenticado, eliminar userCart y productos-en-carrito de localStorage
+    localStorage.removeItem('userCart');
+    localStorage.removeItem('productos-en-carrito');
+    
+    // Redirigir a la página de inicio de sesión
+    window.location.href = 'login.html';
+}
+
+// Continuar con el resto del código solo si el usuario está autenticado
 const productosEncarrito = JSON.parse(localStorage.getItem("productos-en-carrito"));
 console.log(productosEncarrito);
 
@@ -93,11 +105,6 @@ function actualizarTotal() {
 
 botonComprar.addEventListener("click", comprarCarrito);
 
-
-
-//// testing 
-
-
 // Botón comprar carrito
 botonComprar.addEventListener("click", comprarCarrito);
 
@@ -164,11 +171,3 @@ async function comprarCarrito() {
         alert('Hubo un problema al procesar la compra. Por favor, intenta más tarde.');
     }
 }
-
-
-
-
-
-
-
-
