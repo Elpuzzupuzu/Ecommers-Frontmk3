@@ -97,11 +97,26 @@ html{
     border-radius: 1rem;
 }
 
+#logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-
+#logo-container img {
+    width: 100%; /* Se ajustará al tamaño del contenedor */
+    max-width: 50px; /* Tamaño máximo para el logo */
+    height: auto; /* Mantiene la proporción de la imagen */
+    border-radius: 50%;
+    object-fit: cover;
+}
 
 
 /*--------------FIN TESTING ----///
+
+
+
+
 
 /* Header---------*/
 
