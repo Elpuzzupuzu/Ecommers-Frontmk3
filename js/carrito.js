@@ -124,7 +124,7 @@ async function comprarCarrito() {
             const productId = producto.id;
             const quantity = producto.sold;
 
-            const response = await fetch('http://localhost:8080/cart-items/add', {
+            const response = await fetch('https://d2sd26qoendot.cloudfront.net/cart-items/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -145,7 +145,7 @@ async function comprarCarrito() {
         }
 
         // Después de agregar todos los productos al carrito, proceder con la compra
-        const purchaseResponse = await fetch('http://localhost:8080/products/purchase', {
+        const purchaseResponse = await fetch('https://d2sd26qoendot.cloudfront.net/products/purchase', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

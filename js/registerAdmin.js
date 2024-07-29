@@ -13,7 +13,7 @@ document.getElementById('crearAdminForm').addEventListener('submit', function(ev
         password: password
     };
 
-    fetch('http://localhost:8080/admins/create', {
+    fetch('https://d2sd26qoendot.cloudfront.net/admins/create', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

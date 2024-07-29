@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Función para cargar las imágenes desde el endpoint
     function loadImages() {
-        fetch('http://localhost:8080/gallery/allgallery')
+        fetch('https://d2sd26qoendot.cloudfront.net/gallery/allgallery')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al cargar las imágenes');

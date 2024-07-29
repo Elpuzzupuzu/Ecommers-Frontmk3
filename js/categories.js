@@ -8,7 +8,7 @@ document.getElementById('buscarCategoriaForm').addEventListener('submit', async 
 // Función para buscar una categoría por ID
 async function buscarCategoriaPorId(categoriaId) {
     try {
-        const response = await fetch(`http://localhost:8080/categories/${categoriaId}`);
+        const response = await fetch(`https://d2sd26qoendot.cloudfront.net/categories/${categoriaId}`);
         if (!response.ok) {
             throw new Error('Categoría no encontrada.');
         }
@@ -37,7 +37,7 @@ async function buscarCategoriaPorId(categoriaId) {
 // Función para mostrar todas las categorías existentes
 async function mostrarCategorias() {
     try {
-        const response = await fetch('http://localhost:8080/categories');
+        const response = await fetch('https://d2sd26qoendot.cloudfront.net/categories');
         if (!response.ok) {
             throw new Error('Error al obtener las categorías.');
         }
@@ -71,7 +71,7 @@ document.getElementById('crearCategoriaForm').addEventListener('submit', async f
     const nombreCategoria = document.getElementById('nombreCategoria').value.trim();
 
     try {
-        const response = await fetch('http://localhost:8080/categories/create', {
+        const response = await fetch('https://d2sd26qoendot.cloudfront.net/categories/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -132,7 +132,7 @@ async function eliminarCategoria(categoriaId) {
     const confirmacion = confirm('¿Estás seguro de eliminar esta categoría?');
     if (confirmacion) {
         try {
-            const response = await fetch(`http://localhost:8080/categories/${categoriaId}`, {
+            const response = await fetch(`https://d2sd26qoendot.cloudfront.net/categories/${categoriaId}`, {
                 method: 'DELETE'
             });
 

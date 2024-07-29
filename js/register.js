@@ -16,7 +16,7 @@ document.getElementById('crearUsuarioForm').addEventListener('submit', async fun
 
     try {
         // Enviar datos al servidor para crear el usuario
-        const response = await fetch('http://localhost:8080/users/create', {
+        const response = await fetch('https://d2sd26qoendot.cloudfront.net/users/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -58,7 +58,7 @@ document.getElementById('crearUsuarioForm').addEventListener('submit', async fun
 // Función para crear un carrito para el usuario
 async function createCartForUser(userId) {
     try {
-        const response = await fetch(`http://localhost:8080/cart/create?userId=${userId}`, {
+        const response = await fetch(`https://d2sd26qoendot.cloudfront.net/cart/create?userId=${userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Funciones
     async function cargarProductos() {
         try {
-            const response = await fetch('http://localhost:8080/products/getall');
+            const response = await fetch('https://d2sd26qoendot.cloudfront.net/products/getall');
             if (!response.ok) throw new Error('Error al obtener los productos.');
 
             const productos = await response.json();
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function buscarProductoPorId(productoId) {
         try {
-            const response = await fetch(`http://localhost:8080/products/${productoId}`);
+            const response = await fetch(`https://d2sd26qoendot.cloudfront.net/products/${productoId}`);
             if (!response.ok) throw new Error('Producto no encontrado o error en la solicitud.');
 
             const producto = await response.json();
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function crearProducto(nuevoProducto) {
         try {
-            const response = await fetch('http://localhost:8080/products/create', {
+            const response = await fetch('https://d2sd26qoendot.cloudfront.net/products/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function eliminarProducto(productoId) {
         if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
             try {
-                const response = await fetch(`http://localhost:8080/products/delete/${productoId}`, {
+                const response = await fetch(`https://d2sd26qoendot.cloudfront.net/products/delete/${productoId}`, {
                     method: 'DELETE'
                 });
 
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function editarProducto(productoEditado) {
         try {
-            const response = await fetch(`http://localhost:8080/products/update/${productoEditado.id}`, {
+            const response = await fetch(`https://d2sd26qoendot.cloudfront.net/products/update/${productoEditado.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

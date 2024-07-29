@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const baseUrl = 'http://localhost:8080/products/page'; // Reemplaza con la URL de tu servidor Spring Boot
+    const baseUrl = 'https://d2sd26qoendot.cloudfront.net/products/page'; // Reemplaza con la URL de tu servidor Spring Boot
     let currentPage = 0;
     const pageSize = 5;
     const numerito = document.getElementById('numerito');
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para enviar el producto al carrito en el backend
     async function agregarProductoAlCarrito(productId, quantity) {
         try {
-            const response = await fetch(`http://localhost:8080/cart/add?userId=1&productId=${productId}&quantity=${quantity}`, {
+            const response = await fetch(`https://d2sd26qoendot.cloudfront.net/cart/add?userId=1&productId=${productId}&quantity=${quantity}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

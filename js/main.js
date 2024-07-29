@@ -2,7 +2,7 @@
 // Función para obtener los productos resumidos por categoría
 async function getProductSummariesByCategory(categoryName) {
     try {
-        const response = await fetch(`http://localhost:8080/products/by-category?categoryName=${categoryName}`);
+        const response = await fetch(`https://d2sd26qoendot.cloudfront.net/products/by-category?categoryName=${categoryName}`);
         if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
         }
@@ -18,7 +18,7 @@ async function getProductSummariesByCategory(categoryName) {
 // Función para obtener todos los productos resumidos
 async function getAllProductSummaries() {
     try {
-        const response = await fetch('http://localhost:8080/products/getall');
+        const response = await fetch('https://d2sd26qoendot.cloudfront.net/products/getall');
         if (!response.ok) {
             throw new Error(`Error: ${response.status}`);
         }
@@ -238,7 +238,7 @@ async function agregarAlCarrito(e) {
 // Función para enviar el producto al carrito en el backend
 async function agregarProductoAlCarrito(productId, quantity) {
     try {
-        const response = await fetch(`http://localhost:8080/cart/add?userId=1&productId=${productId}&quantity=${quantity}`, {
+        const response = await fetch(`https://d2sd26qoendot.cloudfront.net/cart/add?userId=1&productId=${productId}&quantity=${quantity}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
