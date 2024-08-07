@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('https://d2sd26qoendot.cloudfront.net/users/all') // Ajusta la URL según sea necesario
+    fetch('http://localhost:8080/users/all') // Ajusta la URL según sea necesario
         .then(response => response.json())
         .then(data => {
             console.log('Datos obtenidos de la API:', data); // Verifica los datos en la consola

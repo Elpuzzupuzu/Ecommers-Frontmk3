@@ -6,7 +6,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('https://d2sd26qoendot.cloudfront.net/users/login', {
+        const response = await fetch('http://localhost:8080/users/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 async function handleCartId(userId) {
     try {
         // Fetch para obtener solo el ID del carrito del usuario
-        const response = await fetch(`https://d2sd26qoendot.cloudfront.net/cart/${userId}/cartId`);
+        const response = await fetch(`http://localhost:8080/cart/${userId}/cartId`);
         if (!response.ok) {
             throw new Error('Error al obtener el ID del carrito');
         }

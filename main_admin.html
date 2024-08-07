@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Menu</title>
     <link rel="stylesheet" href="/css/main_admin.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si adminInfo es nulo
+            let adminInfo = localStorage.getItem('adminInfo');
+            if (adminInfo === null) {
+                window.location.href = 'login_admin.html'; // Cambia 'pagina_especifica.html' por la URL deseada
+            }
+        });
+    </script>
 </head>
 <body>
     <header>

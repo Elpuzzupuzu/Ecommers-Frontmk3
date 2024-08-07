@@ -1,4 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
+    // Verificar si adminInfo es nulo al cargar la página
+    let adminInfo = localStorage.getItem('adminInfo');
+    if (adminInfo === null) {
+        window.location.href = 'login_admin.html'; // 
+    }
+
     const buscarProductoForm = document.getElementById('buscarProductoForm');
     const listaProductos = document.getElementById('listaProductos');
     const recargarProductosBtn = document.getElementById('recargarProductos');
@@ -34,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Funciones
     async function cargarProductos() {
         try {
-            const response = await fetch('https://d2sd26qoendot.cloudfront.net/products/getall');
+            const response = await fetch('http://localhost:8080/products/getall');
             if (!response.ok) throw new Error('Error al obtener los productos.');
 
             const productos = await response.json();
@@ -47,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function buscarProductoPorId(productoId) {
         try {
-            const response = await fetch(`https://d2sd26qoendot.cloudfront.net/products/${productoId}`);
+            const response = await fetch(`http://localhost:8080/products/${productoId}`);
             if (!response.ok) throw new Error('Producto no encontrado o error en la solicitud.');
 
             const producto = await response.json();
@@ -62,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function crearProducto(nuevoProducto) {
         try {
-            const response = await fetch('https://d2sd26qoendot.cloudfront.net/products/create', {
+            const response = await fetch('http://localhost:8080/products/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -153,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function eliminarProducto(productoId) {
         if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
             try {
-                const response = await fetch(`https://d2sd26qoendot.cloudfront.net/products/delete/${productoId}`, {
+                const response = await fetch(`http://localhost:8080/products/delete/${productoId}`, {
                     method: 'DELETE'
                 });
 
@@ -170,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function editarProducto(productoEditado) {
         try {
-            const response = await fetch(`https://d2sd26qoendot.cloudfront.net/products/update/${productoEditado.id}`, {
+            const response = await fetch(`http://localhost:8080/products/update/${productoEditado.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -195,58 +201,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
         editarProductoForm.innerHTML = `
             <h2>Editar Producto</h2>
-            <input type="hidden" id="editarProductoId" value="${producto.id}">
-            <div class="form-group">
-                <label for="editarImagen">Imagen:</label>
-                <input type="text" id="editarImagen" name="editarImagen" value="${producto.img}" required>
-            </div>
-            <div class="form-group">
-                <label for="editarIdCategoria">Id del producto:</label>
-                <input type="number" id="editarIdCategoria" name="editarIdCategoria" value="${producto.id_category}" required>
-            </div>
-            <div class="form-group">
-                <label for="editarNombre">Nombre:</label>
-                <input type="text" id="editarNombre" name="editarNombre" value="${producto.name}" required>
-            </div>
-            <div class="form-group">
-                <label for="editarDescripcion">Descripción:</label>
-                <textarea id="editarDescripcion" name="editarDescripcion" rows="3" required>${producto.description}</textarea>
-            </div>
-            <div class="form-group">
-                <label for="editarPrecio">Precio:</label>
-                <input type="number" id="editarPrecio" name="editarPrecio" step="0.01" min="0" value="${producto.price}" required>
-            </div>
-            <div class="form-group">
-                <label for="editarStock">Stock:</label>
-                <input type="number" id="editarStock" name="editarStock" min="0" value="${producto.stock}" required>
-            </div>
-            <button type="submit">Guardar Cambios</button>
-            <button type="button" id="cancelarEdicion">Cancelar</button>
+            <input type="hidden" id="editId" value="${producto.id}">
+            <label for="editImagen">Imagen:</label>
+            <input type="text" id="editImagen" value="${producto.img}" required>
+            <label for="editIdCategoria">ID Categoría:</label>
+            <input type="number" id="editIdCategoria" value="${producto.id_category}" required>
+            <label for="editNombre">Nombre:</label>
+            <input type="text" id="editNombre" value="${producto.name}" required>
+            <label for="editDescripcion">Descripción:</label>
+            <input type="text" id="editDescripcion" value="${producto.description}" required>
+            <label for="editPrecio">Precio:</label>
+            <input type="number" id="editPrecio" value="${producto.price}" step="0.01" required>
+            <label for="editStock">Stock:</label>
+            <input type="number" id="editStock" value="${producto.stock}" required>
+            <button type="submit">Actualizar Producto</button>
         `;
+
+        document.body.appendChild(editarProductoForm);
 
         editarProductoForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const productoEditado = obtenerDatosFormularioEdicion();
-            await editarProducto(productoEditado);
+
+            const productoEditado = {
+                id: parseInt(document.getElementById('editId').value),
+                img: document.getElementById('editImagen').value.trim(),
+                id_category: parseInt(document.getElementById('editIdCategoria').value.trim()),
+                name: document.getElementById('editNombre').value.trim(),
+                description: document.getElementById('editDescripcion').value.trim(),
+                price: parseFloat(document.getElementById('editPrecio').value.trim()),
+                stock: parseInt(document.getElementById('editStock').value.trim())
+            };
+
+            if (validarCampos(productoEditado)) {
+                await editarProducto(productoEditado);
+            } else {
+                alert('Por favor, complete todos los campos del formulario.');
+            }
         });
-
-        editarProductoForm.querySelector('#cancelarEdicion').addEventListener('click', () => {
-            editarProductoForm.remove();
-        });
-
-        const productoItem = listaProductos.querySelector(`.producto-item[data-id="${producto.id}"]`);
-        productoItem.appendChild(editarProductoForm);
-    }
-
-    function obtenerDatosFormularioEdicion() {
-        return {
-            id: parseInt(document.getElementById('editarProductoId').value),
-            img: document.getElementById('editarImagen').value.trim(),
-            id_category: parseInt(document.getElementById('editarIdCategoria').value),
-            name: document.getElementById('editarNombre').value.trim(),
-            description: document.getElementById('editarDescripcion').value.trim(),
-            price: parseFloat(document.getElementById('editarPrecio').value.trim()),
-            stock: parseInt(document.getElementById('editarStock').value.trim())
-        };
     }
 });

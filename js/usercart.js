@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const userId = userInfo.userId;
 
         // Fetch para obtener solo el ID del carrito del usuario
-        const response = await fetch(`https://d2sd26qoendot.cloudfront.net/cart/${userId}/cartId`);
+        const response = await fetch(`http://localhost:8080/cart/${userId}/cartId`);
         if (!response.ok) {
             throw new Error('Error al obtener el ID del carrito');
         }

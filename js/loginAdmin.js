@@ -6,7 +6,7 @@ document.getElementById('loginAdminForm').addEventListener('submit', async funct
     const password = document.getElementById('password').value;
 
     try {
-        const response = await fetch('https://d2sd26qoendot.cloudfront.net/admins/login', {
+        const response = await fetch('http://localhost:8080/admins/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
